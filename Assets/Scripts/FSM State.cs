@@ -5,15 +5,23 @@ using UnityEngine;
 public enum TransitionID
 {
     NullTransition = 0,
+    StartRoaming,
+    StopRoaming,
     SawTarget,
     LostTarget,
+    StartHurt,
+    StopHurt,
+
+
 }
 
 public enum StateID
 {
     NullState = 0,
+    Idle,
     Roaming,
     ChasingTarget,
+    Hurt,
 }
 
 public abstract class FSMState
