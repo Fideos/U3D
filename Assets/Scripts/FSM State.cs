@@ -26,6 +26,7 @@ public enum StateID
 
 public abstract class FSMState
 {
+    protected AIController aiController;
     protected Dictionary<TransitionID, StateID> stateDictionary = new Dictionary<TransitionID, StateID>();
     protected StateID myID;
     public StateID getID
@@ -40,13 +41,13 @@ public abstract class FSMState
     {
         if (transition == TransitionID.NullTransition)
         {
-            Debug.LogError("!");
+            Debug.LogError("!!!");
             return;
         }
 
         if (state == StateID.NullState)
         {
-            Debug.LogError("!");
+            Debug.LogError("!!!");
             return;
         }
         if (stateDictionary.ContainsKey(transition))
@@ -64,7 +65,7 @@ public abstract class FSMState
     {
         if (transition == TransitionID.NullTransition)
         {
-            Debug.LogError("!");
+            Debug.LogError("!!!");
             return;
         }
         if (stateDictionary.ContainsKey(transition))
@@ -77,7 +78,7 @@ public abstract class FSMState
         }
     }
 
-    public StateID GetOutputState(TransitionID transition)
+    public StateID GetOutputState(TransitionID transition) //Devuelve el StateID al que lleva la respectiva Transición.
     {
         if (stateDictionary.ContainsKey(transition))
         {
@@ -119,7 +120,7 @@ public class FSM
         stateList = new List<FSMState>();
     }
 
-    public void AddState(FSMState state) //Ejemplo de la wiki
+    public void AddState(FSMState state)
     {
 
         if (state == null)
@@ -127,7 +128,7 @@ public class FSM
             Debug.LogError(" ! Estado nulo.");
         }
         
-        if (stateList.Count == 0)
+        if (stateList.Count == 0) //Asigna el primer estado que recibe al current.
         {
             stateList.Add(state);
             currentState = state;
@@ -165,7 +166,7 @@ public class FSM
         Debug.LogError("El estado no existe.");
     }
 
-    public void PerformTransition(TransitionID transition)
+    public void PerformTransition(TransitionID transition) //Asigna el estado al que lleva la transicion a current.
     {
         
         if (transition == TransitionID.NullTransition)
@@ -174,7 +175,7 @@ public class FSM
             return;
         }
         
-        StateID state = currentState.GetOutputState(transition);
+        StateID state = currentState.GetOutputState(transition); //Recibe el estado al que se le asigno la transición.
         
         if (state == StateID.NullState)
         {
@@ -189,7 +190,7 @@ public class FSM
             {
                 currentState = s;
 
-                break;
+                break; //Si lo encuentra lo asigna a Current.
             }
         }
 

@@ -14,6 +14,28 @@ public class PoolManager : MonoBehaviour
     [SerializeField]
     ObjectPool[] poolManager;
 
+    public void ApplyForce(string name, Vector3 target, float speed)
+    {
+        for (int i = 0; i < poolManager.Length; i++)
+        {
+            if (poolManager[i].name == name)
+            {
+                poolManager[i].ApplyForce(target, speed);
+            }
+        }
+    }
+
+    public void UpdatePosition(string name, Transform posToSet)
+    {
+        for (int i = 0; i < poolManager.Length; i++)
+        {
+            if (poolManager[i].name == name)
+            {
+                poolManager[i].pos = posToSet.transform.position;
+            }
+        }
+    }
+
     public void DestroyObject(string name)
     {
         for (int i = 0; i < poolManager.Length; i++)

@@ -11,8 +11,17 @@ public class ObjectPool
     public Vector3 pos, scale, rot;
     public bool expand;
 
+    private int lastSpawned;
+
     [SerializeField]
     GameObject[] pool;
+
+    public void ApplyForce(Vector3 target, float speed)
+    {
+        Rigidbody rb;
+        rb = pool[lastSpawned].GetComponent<Rigidbody>();
+        rb.AddForce(target * speed);
+    }
 
     GameObject[] ForceExpandRequest(GameObject[] pool)
     {
@@ -62,7 +71,7 @@ public class ObjectPool
         obj.transform.Rotate(rot);
         obj.transform.localScale = scale;
         obj.SetActive(true);
-
+        lastSpawned = i;
     }
 
     public void Initialize()
