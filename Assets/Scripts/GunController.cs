@@ -22,11 +22,20 @@ public class GunController : MonoBehaviour {
 
     private float reloadTimer;
 
+    /*AUDIO*/
+    private AudioSource source;
+    [SerializeField]
+    private float volLowRange;
+    [SerializeField]
+    private float volHighRange;
+
+
     private void Reload()
     {
         reloading = false;
         reloadTimer = currentWeapon.reloadSpeed;
         bulletsLeft = currentWeapon.magSize;
+        source.PlayOneShot(currentWeapon.finishReloadingSound, volHighRange);
         Debug.Log("Reloaded");
     }
 
@@ -51,6 +60,8 @@ public class GunController : MonoBehaviour {
                 PoolManager.Instance().CreateObject("Bullets");
                 Aim();
             }
+            float vol = Random.Range(volLowRange, volHighRange);
+            source.PlayOneShot(currentWeapon.shootSound, vol);
             lastShot = Time.time;
             bulletsLeft--;
         }
@@ -75,6 +86,7 @@ public class GunController : MonoBehaviour {
 
     private void Awake()
     {
+        source = GetComponent<AudioSource>();
         RefreshWeapon();
     }
 
@@ -88,18 +100,29 @@ public class GunController : MonoBehaviour {
             }
             else
             {
-                Debug.Log("Out of bullets.");
+                if (Time.time > currentWeapon.fireRate + lastShot)
+                {
+                    source.PlayOneShot(currentWeapon.dryFireSound, volHighRange);
+                    Debug.Log("Out of bullets.");
+                    lastShot = Time.time;
+                }
             }
         }
 
         if (Input.GetKey(reloadBind) && bulletsLeft < currentWeapon.magSize && reloading == false)
         {
             reloading = true;
+            source.PlayOneShot(currentWeapon.startReloadingSound, volHighRange);
             Debug.Log("Reloading...");
         }
         if (reloading)
         {
             reloadTimer -= Time.deltaTime;
+            if (Time.time > 1 + lastShot)
+            {
+                source.PlayOneShot(currentWeapon.midReloadingSound, volHighRange);
+                lastShot = Time.time;
+            }
         }
         if(reloadTimer <= 0)
         {

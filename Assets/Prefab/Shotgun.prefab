@@ -101,3 +101,9 @@ MonoBehaviour:
   magSize: 2
   recoil: 130
   reloadSpeed: 2
+  shootSound: {fileID: 8300000, guid: 242c98391afd3d240879952defd932f6, type: 3}
+  dryFireSound: {fileID: 8300000, guid: 3049566fbc45c0a49959810ef0276c70, type: 3}
+  startReloadingSound: {fileID: 8300000, guid: 53958a0d0ee37ce45be1d8b6614225fa, type: 3}
+  midReloadingSound: {fileID: 8300000, guid: 1dc4462094ece124dade641feba712f7, type: 3}
+  finishReloadingSound: {fileID: 8300000, guid: 0e8fef2e6aee1b3419bb47a0359fac73,
+    type: 3}

@@ -95,9 +95,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunName: Gun
-  fireRate: 1.5
+  fireRate: 1
   bulletSpeed: 1500
   bulletsPerShot: 1
   magSize: 6
   recoil: 0
-  reloadSpeed: 2.5
+  reloadSpeed: 1.5
+  shootSound: {fileID: 8300000, guid: 8f86b1a398307b545885bcc179b8d68f, type: 3}
+  dryFireSound: {fileID: 8300000, guid: 40039abeb01ef444584463ad686cc178, type: 3}
+  startReloadingSound: {fileID: 8300000, guid: 50bece93b11a45f49bbc0c7838cbf8b1, type: 3}
+  midReloadingSound: {fileID: 8300000, guid: c4c37b8ee663cc541b477a8db5991772, type: 3}
+  finishReloadingSound: {fileID: 8300000, guid: ca428dbd5ddd5c9449e478096f3a8caa,
+    type: 3}

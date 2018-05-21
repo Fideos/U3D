@@ -13,6 +13,13 @@ public class Gun : MonoBehaviour
     public int recoil;
     public float reloadSpeed;
 
+    /*Audio*/
+    public AudioClip shootSound;
+    public AudioClip dryFireSound;
+    public AudioClip startReloadingSound;
+    public AudioClip midReloadingSound;
+    public AudioClip finishReloadingSound;
+
 
     private void Awake()
     {
