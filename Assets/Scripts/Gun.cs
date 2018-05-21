@@ -7,7 +7,8 @@ public class Gun : MonoBehaviour
 
     public string gunName;
     public float fireRate;
-    public float speed;
+    public float bulletSpeed;
+    public int bulletsPerShot;
     public float magSize;
     public int recoil;
     public float reloadSpeed;
@@ -15,6 +16,10 @@ public class Gun : MonoBehaviour
 
     private void Awake()
     {
+        if(bulletsPerShot <= 0)
+        {
+            bulletsPerShot = 1;
+        }
         if(name == null)
         {
             name = "Default";

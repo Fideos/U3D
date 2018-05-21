@@ -38,25 +38,28 @@ public class GunController : MonoBehaviour {
         this.gameObject.transform.LookAt(aim);
         this.transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
         //Debug.Log(aim);
-        PoolManager.Instance().ApplyForce("Bullets", this.gameObject.transform.forward, currentWeapon.speed);
+        PoolManager.Instance().ApplyForce("Bullets", this.gameObject.transform.forward, currentWeapon.bulletSpeed);
     }
 
     private void FireBullet()
     {
         if (Time.time > currentWeapon.fireRate + lastShot)
         {
-            PoolManager.Instance().UpdatePosition("Bullets", this.transform);
-            PoolManager.Instance().CreateObject("Bullets");
-            Aim();
+            for(int i = 0; i < currentWeapon.bulletsPerShot; i++)
+            {
+                PoolManager.Instance().UpdatePosition("Bullets", this.transform);
+                PoolManager.Instance().CreateObject("Bullets");
+                Aim();
+            }
             lastShot = Time.time;
             bulletsLeft--;
         }
     }
 
-    private void Awake()
+    private void RefreshWeapon()
     {
         reloading = false;
-        if(currentWeapon != null)
+        if (currentWeapon != null)
         {
             ready = true;
             bulletsLeft = currentWeapon.magSize;
@@ -68,6 +71,11 @@ public class GunController : MonoBehaviour {
             Debug.Log("You don't have a weapon.");
         }
         reloadTimer = currentWeapon.reloadSpeed;
+    }
+
+    private void Awake()
+    {
+        RefreshWeapon();
     }
 
     private void Update()
