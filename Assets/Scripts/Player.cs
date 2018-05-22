@@ -29,10 +29,21 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private float rotation;
 
+    public bool GetMovement()
+    {
+        if(controller.velocity != new Vector3 (0,0,0))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     private void Rotate(float rot)
     {
         transform.Rotate(0, rot * rotationSpeed * Time.deltaTime, 0);
-        
     }
 
     private void Jump(ref float y)

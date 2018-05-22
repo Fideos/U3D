@@ -28,6 +28,14 @@ public class GunController : MonoBehaviour {
     private float volLowRange;
     [SerializeField]
     private float volHighRange;
+    
+    
+    /*ANIMATOR*/
+
+    public bool GetReloading()
+    {
+        return reloading;
+    }
 
 
     private void Reload()
@@ -92,7 +100,7 @@ public class GunController : MonoBehaviour {
 
     private void Update()
     {
-        if (Input.GetKey(shootingBind) && ready)
+        if (Input.GetKey(shootingBind) && ready && !reloading)
         {
             if (bulletsLeft > 0)
             {
