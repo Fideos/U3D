@@ -20,6 +20,24 @@ public class Gun : MonoBehaviour
     public AudioClip midReloadingSound;
     public AudioClip finishReloadingSound;
 
+    [SerializeField]
+    private bool destroyOnPickup;
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            Debug.Log("Ready to pick");
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                other.GetComponent<Player>().handReference.WeaponPickup(this);
+                if (destroyOnPickup)
+                {
+                    Destroy(this.gameObject);
+                }
+            }
+        }
+    }
 
     private void Awake()
     {
@@ -31,6 +49,7 @@ public class Gun : MonoBehaviour
         {
             name = "Default";
         }
+        this.transform.rotation = Quaternion.Euler(90, 0, 0);
     }
 
 }

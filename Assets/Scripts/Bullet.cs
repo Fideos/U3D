@@ -4,8 +4,14 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour {
 
+
+
     [SerializeField]
     private bool destroyOnCollision;
+    [SerializeField]
+    private float bulletDamage;
+
+    private bool hit;
 
 
 
@@ -16,12 +22,21 @@ public class Bullet : MonoBehaviour {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         this.gameObject.SetActive(false);
+        hit = false;
         //Debug.Log("Bullet Destroyed");
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision other)
     {
-        //Debug.Log("Collided");
+        if (!hit) // Reformular mas tarde
+        {
+            if (other.gameObject.tag == "Enemy")
+            {
+                Enemy target = other.gameObject.GetComponent<Enemy>();
+                target.DealDamage(bulletDamage);
+                hit = true;
+            }
+        }
         if (destroyOnCollision)
         {
             DestroyBullet();

@@ -38,6 +38,13 @@ public class GunController : MonoBehaviour {
     }
 
 
+    public void WeaponPickup(Gun weaponPick)
+    {
+        ready = false;
+        currentWeapon = weaponPick;
+        RefreshWeapon();
+    }
+
     private void Reload()
     {
         reloading = false;
@@ -50,10 +57,10 @@ public class GunController : MonoBehaviour {
     private void Aim()
     {
         bulletAngle = Random.Range(-currentWeapon.recoil, currentWeapon.recoil);
-        aim = new Vector3(Input.mousePosition.x + bulletAngle, Input.mousePosition.y, distance);
+        aim = new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance);
         aim = Camera.main.ScreenToWorldPoint(aim);
         this.gameObject.transform.LookAt(aim);
-        this.transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+        this.transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y + bulletAngle, 0);
         //Debug.Log(aim);
         PoolManager.Instance().ApplyForce("Bullets", this.gameObject.transform.forward, currentWeapon.bulletSpeed);
     }
@@ -83,6 +90,7 @@ public class GunController : MonoBehaviour {
             ready = true;
             bulletsLeft = currentWeapon.magSize;
             Debug.Log(currentWeapon.name + " ready!");
+            source.PlayOneShot(currentWeapon.finishReloadingSound, volHighRange);
         }
         else
         {

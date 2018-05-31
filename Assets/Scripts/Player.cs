@@ -14,6 +14,8 @@ public class Player : MonoBehaviour {
     public float gravity;
     [SerializeField]
     public float jumpsCap;
+    
+    public GunController handReference;
 
     private float jumpCount = 0;
 
@@ -27,7 +29,7 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private float inputY;
     [SerializeField]
-    private float rotation;
+    //private float rotation;
 
     public bool GetMovement()
     {
@@ -68,7 +70,7 @@ public class Player : MonoBehaviour {
             Jump(ref y);
         }
 
-        // Arreglar con mouse.
+        /* Arreglar con mouse.
         if (Input.GetKey(KeyCode.Q))
         {
             rotation = -1;
@@ -84,6 +86,7 @@ public class Player : MonoBehaviour {
                 rotation = 0;
             }
         }
+        */
     }
 
     private void Movement()
@@ -112,6 +115,6 @@ public class Player : MonoBehaviour {
     {
         GetInput(ref inputX, ref inputY, ref inputZ);
         Movement();
-        Rotate(rotation);
+        //Rotate(rotation);
     }
 }
