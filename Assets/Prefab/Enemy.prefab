@@ -2149,6 +2149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5d8706f758577146843f2e290a92a6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: {fileID: 114734789930388358}
   hp: 100
 --- !u!114 &114734789930388358
 MonoBehaviour:
@@ -2161,6 +2162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92434540c62c7a8489af5d31d9c5783f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  self: {fileID: 114481245281541868}
   target: {fileID: 0}
   path: []
   hearingRadio: 1

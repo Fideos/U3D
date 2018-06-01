@@ -54,6 +54,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunName: Gun
+  damage: 1e00000037000000
   fireRate: 1
   bulletSpeed: 1500
   bulletsPerShot: 1

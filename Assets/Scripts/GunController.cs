@@ -17,6 +17,7 @@ public class GunController : MonoBehaviour {
     private Vector3 aim;
     private bool ready;
     private bool reloading;
+    private int bulletDamage;
     private int bulletAngle;
     private float bulletsLeft;
 
@@ -56,13 +57,14 @@ public class GunController : MonoBehaviour {
 
     private void Aim()
     {
+        bulletDamage = Random.Range(currentWeapon.damage[0], currentWeapon.damage[1]);
         bulletAngle = Random.Range(-currentWeapon.recoil, currentWeapon.recoil);
         aim = new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance);
         aim = Camera.main.ScreenToWorldPoint(aim);
         this.gameObject.transform.LookAt(aim);
         this.transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y + bulletAngle, 0);
         //Debug.Log(aim);
-        PoolManager.Instance().ApplyForce("Bullets", this.gameObject.transform.forward, currentWeapon.bulletSpeed);
+        PoolManager.Instance().ShootBullet("Bullets", this.gameObject.transform.forward, currentWeapon.bulletSpeed, bulletDamage);
     }
 
     private void FireBullet()

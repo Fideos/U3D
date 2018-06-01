@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
 
+
+    [SerializeField]
+    private AIController controller;
     [SerializeField]
     private float hp;
 
-    private void Die()
+    public float GetHP()
+    {
+        return hp;
+    }
+
+    public void Die()
     {
         Destroy(this.gameObject.GetComponent<Collider>());
     }

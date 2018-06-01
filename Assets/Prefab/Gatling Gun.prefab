@@ -54,11 +54,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunName: GatlingGun
+  damage: 1900000028000000
   fireRate: 0.14
   bulletSpeed: 1000
   bulletsPerShot: 1
   magSize: 25
-  recoil: 15
+  recoil: 10
   reloadSpeed: 1.5
   shootSound: {fileID: 8300000, guid: 01a90b4e3736ec442bb6fef32ae01037, type: 3}
   dryFireSound: {fileID: 8300000, guid: 40039abeb01ef444584463ad686cc178, type: 3}

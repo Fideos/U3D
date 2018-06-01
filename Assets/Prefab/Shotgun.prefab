@@ -54,11 +54,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunName: Shotgun
+  damage: 1900000023000000
   fireRate: 1.3
   bulletSpeed: 1500
-  bulletsPerShot: 6
+  bulletsPerShot: 10
   magSize: 2
-  recoil: 25
+  recoil: 15
   reloadSpeed: 2
   shootSound: {fileID: 8300000, guid: 242c98391afd3d240879952defd932f6, type: 3}
   dryFireSound: {fileID: 8300000, guid: 3049566fbc45c0a49959810ef0276c70, type: 3}

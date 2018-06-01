@@ -9,11 +9,14 @@ public class Bullet : MonoBehaviour {
     [SerializeField]
     private bool destroyOnCollision;
     [SerializeField]
-    private float bulletDamage;
+    private int bulletDamage;
 
     private bool hit;
 
-
+    public void SetBulletDamage(int setDamage)
+    {
+        bulletDamage = setDamage;
+    }
 
     private void DestroyBullet()
     {

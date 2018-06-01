@@ -6,6 +6,7 @@ public class Gun : MonoBehaviour
 {
 
     public string gunName;
+    public int[] damage;
     public float fireRate;
     public float bulletSpeed;
     public int bulletsPerShot;
@@ -41,6 +42,16 @@ public class Gun : MonoBehaviour
 
     private void Awake()
     {
+        /*
+        if (damage != new int[2])
+        {
+            damage = new int[2];
+            damage[0] = 30;
+            damage[1] = 50;
+        }
+        */
+        //Debug.Log(damage[0] + ", " + damage[1]);
+
         if(bulletsPerShot <= 0)
         {
             bulletsPerShot = 1;

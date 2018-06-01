@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class AIController : MonoBehaviour
 {
+    [SerializeField]
+    private Enemy self;
+
     public GameObject target; //El objetivo. En este caso Player.
     public Transform[] path; //No implementado, coordenadas a las que camina en roaming.
 
@@ -20,6 +23,20 @@ public class AIController : MonoBehaviour
     private float fieldOfViewRadio;
     private bool hearing;
     private bool inSight;
+    private Animator anim;
+
+
+
+    public void Die()
+    {
+        anim.SetBool("isDead", true);
+        self.Die();
+    }
+
+    public float GetStatus()
+    {
+        return self.GetHP();
+    }
 
     public bool HeardSomething()
     {
@@ -83,6 +100,7 @@ public class AIController : MonoBehaviour
     public void Awake()
     {
         enemyCollider = this.GetComponent<SphereCollider>();
+        anim = this.GetComponent<Animator>();
         enemyCollider.radius = hearingRadio;
         BuildFSM();
     }
@@ -98,24 +116,32 @@ public class AIController : MonoBehaviour
         idle.AddTransition(TransitionID.StartRoaming, StateID.Roaming);
         idle.AddTransition(TransitionID.SawTarget, StateID.ChasingTarget);
         idle.AddTransition(TransitionID.StartHurt, StateID.Hurt);
+        idle.AddTransition(TransitionID.Dying, StateID.Dead);
 
         RoamState roam = new RoamState(this);
         roam.AddTransition(TransitionID.SawTarget, StateID.ChasingTarget);
         roam.AddTransition(TransitionID.StopRoaming, StateID.Idle);
         roam.AddTransition(TransitionID.StartHurt, StateID.Hurt);
+        roam.AddTransition(TransitionID.Dying, StateID.Dead);
 
-        ChaseTargetState chaseTarget = new ChaseTargetState();
+        ChaseTargetState chaseTarget = new ChaseTargetState(this);
         chaseTarget.AddTransition(TransitionID.LostTarget, StateID.Roaming);
         chaseTarget.AddTransition(TransitionID.StartHurt, StateID.Hurt);
+        chaseTarget.AddTransition(TransitionID.Dying, StateID.Dead);
 
-        HurtState hurt = new HurtState();
+        HurtState hurt = new HurtState(this);
         hurt.AddTransition(TransitionID.StopHurt, StateID.ChasingTarget);
+        hurt.AddTransition(TransitionID.Dying, StateID.Dead);
+
+        DeadState dead = new DeadState(this);
+        dead.AddTransition(TransitionID.Healed, StateID.ChasingTarget);
 
         fsm = new FSM();
         fsm.AddState(roam);
         fsm.AddState(idle);
         fsm.AddState(chaseTarget);
         fsm.AddState(hurt);
+        fsm.AddState(dead);
     }
     
 }
@@ -154,6 +180,11 @@ public class IdleState : FSMState
         {
             thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.StartHurt);
             Debug.Log("Got Attacked!...");
+        }
+
+        if (aiController.GetStatus() <= 0)
+        {
+            thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.Dying);
         }
 
     }
@@ -202,6 +233,11 @@ public class RoamState : FSMState
             thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.StartHurt);
             Debug.Log("Got Attacked!...");
         }
+
+        if (aiController.GetStatus() <= 0)
+        {
+            thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.Dying);
+        }
     }
 
     public override void Behaviour(GameObject target, GameObject thisGameObject)
@@ -213,8 +249,9 @@ public class RoamState : FSMState
 
 public class ChaseTargetState : FSMState
 {
-    public ChaseTargetState()
+    public ChaseTargetState(AIController _aiController)
     {
+        aiController = _aiController;
         myID = StateID.ChasingTarget;
     }
 
@@ -231,6 +268,11 @@ public class ChaseTargetState : FSMState
             thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.StartHurt);
             Debug.Log("Got Attacked!...");
         }
+
+        if (aiController.GetStatus() <= 0)
+        {
+            thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.Dying);
+        }
     }
 
     public override void Behaviour(GameObject target, GameObject thisGameObject)
@@ -243,8 +285,9 @@ public class HurtState : FSMState
 {
     float timer = 2;
 
-    public HurtState()
+    public HurtState(AIController _aiController)
     {
+        aiController = _aiController;
         myID = StateID.Hurt;
     }
 
@@ -255,11 +298,43 @@ public class HurtState : FSMState
             thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.StopHurt);
             Debug.Log("!");
         }
+
+        if (aiController.GetStatus() <= 0)
+        {
+            thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.Dying);
+        }
     }
 
     public override void Behaviour(GameObject target, GameObject thisGameObject)
     {
         timer -= Time.deltaTime;
         Debug.Log("Hurting...");
+    }
+}
+
+public class DeadState : FSMState
+{
+
+    public DeadState(AIController _aiController)
+    {
+        aiController = _aiController;
+        myID = StateID.Dead;
+    }
+
+    public override void Reason(GameObject target, GameObject thisGameObject)
+    {
+        if(aiController.GetStatus() > 0)
+        {
+            thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.Healed);
+        }
+        else
+        {
+            aiController.Die();
+        }
+    }
+
+    public override void Behaviour(GameObject target, GameObject thisGameObject)
+    {
+        Debug.Log("Dying...");
     }
 }

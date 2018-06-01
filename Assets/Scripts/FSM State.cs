@@ -11,8 +11,8 @@ public enum TransitionID
     LostTarget,
     StartHurt,
     StopHurt,
-
-
+    Dying,
+    Healed,
 }
 
 public enum StateID
@@ -22,6 +22,7 @@ public enum StateID
     Roaming,
     ChasingTarget,
     Hurt,
+    Dead,
 }
 
 public abstract class FSMState
