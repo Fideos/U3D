@@ -729,7 +729,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4177347694833052}
   - component: {fileID: 114481245281541868}
-  - component: {fileID: 65745170012765218}
+  - component: {fileID: 143234791724156902}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -1315,7 +1315,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1626359050298640}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: -8}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4689347199363274}
@@ -1775,7 +1775,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1501931561681530}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.45, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4046208137431918}
@@ -2109,18 +2109,6 @@ Transform:
   m_Father: {fileID: 4091128882861980}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &65745170012765218
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1626359050298640}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.5, y: 1.7, z: 0.5}
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!95 &95557823732231450
 Animator:
   serializedVersion: 3
@@ -2130,7 +2118,7 @@ Animator:
   m_GameObject: {fileID: 1501931561681530}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 5045b2c02b41b914bb1b6ac3ca8552b2, type: 3}
-  m_Controller: {fileID: 9100000, guid: 195c02b318d51214da64e5d65335854a, type: 2}
+  m_Controller: {fileID: 9100000, guid: da671232d6b34b24d868a7e03d029c48, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2149,8 +2137,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5d8706f758577146843f2e290a92a6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 114734789930388358}
-  hp: 100
+  ai: {fileID: 0}
+  hp: 60
+  speed: 1
+  gravity: 10
+  weapon: {fileID: 0}
 --- !u!114 &114734789930388358
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2165,9 +2156,10 @@ MonoBehaviour:
   self: {fileID: 114481245281541868}
   target: {fileID: 0}
   path: []
-  hearingRadio: 1
-  fieldOfView: 1
-  fieldOfViewRadio: 1
+  hearingRadio: 5
+  fieldOfView: 90
+  fieldOfViewRadio: 7
+  anim: {fileID: 0}
 --- !u!135 &135101131526478522
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -2376,3 +2368,20 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.0000009536743, y: -0.19487926, z: 0.001876384}
     m_Extent: {x: 0.94527346, y: 0.7953514, z: 0.1378017}
   m_DirtyAABB: 0
+--- !u!143 &143234791724156902
+CharacterController:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1626359050298640}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.75
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.5, z: 0}

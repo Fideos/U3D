@@ -23,9 +23,36 @@ public class AIController : MonoBehaviour
     private float fieldOfViewRadio;
     private bool hearing;
     private bool inSight;
-    private Animator anim;
+    public Animator anim;
 
+    public bool isHit()
+    {
+        if (self.getHit())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
+    public bool HasWeapon()
+    {
+        if (self.hasWeapon())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void ChaseTarget()
+    {
+        self.Movement(target.transform);
+    }
 
     public void Die()
     {
@@ -102,6 +129,7 @@ public class AIController : MonoBehaviour
         enemyCollider = this.GetComponent<SphereCollider>();
         anim = this.GetComponent<Animator>();
         enemyCollider.radius = hearingRadio;
+        target = GameObject.FindGameObjectWithTag("Player");
         BuildFSM();
     }
     public void FixedUpdate()
@@ -176,7 +204,7 @@ public class IdleState : FSMState
             Debug.Log("!");
         }
 
-        if (Input.GetKeyDown(KeyCode.H))
+        if (aiController.isHit())
         {
             thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.StartHurt);
             Debug.Log("Got Attacked!...");
@@ -213,6 +241,7 @@ public class RoamState : FSMState
         if (timer <= 0)
         {
             timer = 20; //Reseteo timer (Por que se rompía.).
+            aiController.anim.SetBool("isRoaming", false);
             thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.StopRoaming);
             Debug.Log("Started Idleing...");
         }
@@ -224,24 +253,28 @@ public class RoamState : FSMState
 
         if (aiController.SeenTarget())
         {
+            aiController.anim.SetBool("isRoaming", false);
             thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.SawTarget);
             Debug.Log("!");
         }
 
-        if (Input.GetKeyDown(KeyCode.H))
+        if (aiController.isHit())
         {
+            aiController.anim.SetBool("isRoaming", false);
             thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.StartHurt);
             Debug.Log("Got Attacked!...");
         }
 
         if (aiController.GetStatus() <= 0)
         {
+            aiController.anim.SetBool("isRoaming", false);
             thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.Dying);
         }
     }
 
     public override void Behaviour(GameObject target, GameObject thisGameObject)
     {
+        aiController.anim.SetBool("isRoaming", true);
         timer -= Time.deltaTime;
         Debug.Log("Roaming...");
     }
@@ -259,31 +292,36 @@ public class ChaseTargetState : FSMState
     {
         if (Vector3.Distance(thisGameObject.transform.position, target.transform.position) >= 15f)
         {
+            aiController.anim.SetBool("isRunning", false);
             thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.LostTarget);
             Debug.Log("?");
         }
 
-        if (Input.GetKeyDown(KeyCode.H))
+        if (aiController.isHit())
         {
+            aiController.anim.SetBool("isRunning", false);
             thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.StartHurt);
             Debug.Log("Got Attacked!...");
         }
 
         if (aiController.GetStatus() <= 0)
         {
+            aiController.anim.SetBool("isRunning", false);
             thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.Dying);
         }
     }
 
     public override void Behaviour(GameObject target, GameObject thisGameObject)
     {
+        aiController.anim.SetBool("isRunning", true);
+        aiController.ChaseTarget();
         Debug.Log("Chasing...");
     }
 }
 
 public class HurtState : FSMState
 {
-    float timer = 2;
+    float timer = 1;
 
     public HurtState(AIController _aiController)
     {
@@ -295,18 +333,21 @@ public class HurtState : FSMState
     {
         if (timer <= 0)
         {
+            aiController.anim.SetBool("gotHit", false);
             thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.StopHurt);
             Debug.Log("!");
         }
 
         if (aiController.GetStatus() <= 0)
         {
+            aiController.anim.SetBool("gotHit", false);
             thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.Dying);
         }
     }
 
     public override void Behaviour(GameObject target, GameObject thisGameObject)
     {
+        aiController.anim.SetBool("gotHit", true);
         timer -= Time.deltaTime;
         Debug.Log("Hurting...");
     }
@@ -335,6 +376,6 @@ public class DeadState : FSMState
 
     public override void Behaviour(GameObject target, GameObject thisGameObject)
     {
-        Debug.Log("Dying...");
+        Debug.Log("Dead");
     }
 }

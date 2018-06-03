@@ -2361,7 +2361,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29cb5d53be92ddd4d97913f5e11375a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentWeapon: {fileID: 0}
+  currentWeapon: {fileID: 114161780337473240, guid: 4f903fdd7e997d743b06de94523dac33,
+    type: 2}
   shootingBind: 323
   reloadBind: 114
   distance: 20
@@ -2613,7 +2614,7 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 1
+  m_Height: 1.5
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
