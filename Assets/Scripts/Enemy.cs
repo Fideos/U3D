@@ -10,16 +10,21 @@ public class Enemy : MonoBehaviour {
     [SerializeField]
     private float hp;
     [SerializeField]
-    private float speed;
-    [SerializeField]
     private float gravity;
     [SerializeField]
     private Gun weapon;
+    [SerializeField]
+    private float rotationSpeed;
 
     private float hpUpdate;
     private CharacterController controller;
 
     private Vector3 vectorDir;
+
+    public void Rotate(Transform target)
+    {
+        this.gameObject.transform.LookAt(target);
+    }
 
     public bool getHit()
     {
@@ -32,12 +37,6 @@ public class Enemy : MonoBehaviour {
         {
             return false;
         }
-    }
-
-    private bool IsGrounded()
-    {
-        bool answer = Physics.Raycast(transform.position, Vector3.down, 0.5f);
-        return answer;
     }
 
     public bool hasWeapon()
@@ -57,12 +56,16 @@ public class Enemy : MonoBehaviour {
         return hp;
     }
 
-    public void Movement(Transform target)
+    public void Movement(Transform target, float speed)
     {
         vectorDir = target.position - transform.position;
         vectorDir *= speed;
+        if (!controller.isGrounded)
+        {
+            vectorDir.y -= gravity * Time.deltaTime;
+        }
         controller.Move(vectorDir * Time.deltaTime);
-        this.gameObject.transform.LookAt(target);
+        Rotate(target);
         this.transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
     }
 

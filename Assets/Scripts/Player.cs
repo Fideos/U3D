@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+
     [SerializeField]
-    public float speed;
+    private float speed;
     [SerializeField]
     public float rotationSpeed;
     [SerializeField]

@@ -7,9 +7,15 @@ public class AIController : MonoBehaviour
 {
     [SerializeField]
     private Enemy self;
+    [SerializeField]
+    public float runSpeed;
+    [SerializeField]
+    public float walkSpeed;
 
     public GameObject target; //El objetivo. En este caso Player.
-    public Transform[] path; //No implementado, coordenadas a las que camina en roaming.
+    public Transform[] path;
+    [SerializeField]
+    private float changePathTime;
 
     private FSM fsm;
 
@@ -23,9 +29,15 @@ public class AIController : MonoBehaviour
     private float fieldOfViewRadio;
     private bool hearing;
     private bool inSight;
+    private bool inAttackRange;
     public Animator anim;
 
-    public bool isHit()
+    public void Rotate()
+    {
+        self.Rotate(target.transform);
+    }
+
+    public bool isHit() //Hurt
     {
         if (self.getHit())
         {
@@ -37,21 +49,32 @@ public class AIController : MonoBehaviour
         }
     }
 
-    public bool HasWeapon()
+    public void ChaseTarget() //Chasing
     {
-        if (self.hasWeapon())
+        self.Movement(target.transform, runSpeed);
+    }
+
+    /* Variables de Roaming */
+    private int point = 0;
+
+    private float roamTimer;
+
+    public void Roam() //Roaming
+    {
+        roamTimer -= Time.deltaTime;
+        if (point < path.Length)
         {
-            return true;
+            self.Movement(path[point], walkSpeed);
+            if (roamTimer <= 0)
+            {
+                point++;
+                roamTimer = changePathTime;
+            }
         }
         else
         {
-            return false;
+            point = 0;
         }
-    }
-
-    public void ChaseTarget()
-    {
-        self.Movement(target.transform);
     }
 
     public void Die()
@@ -82,7 +105,7 @@ public class AIController : MonoBehaviour
             hearing = true;
             target = other.gameObject;
             Vector3 direction = target.transform.position - transform.position;
-            if (fieldOfView / 2 >= Vector3.Angle(Vector3.forward, direction))
+            if (fieldOfView / 2 >= Vector3.Angle(this.transform.forward, direction))
             {
                 RaycastHit hit;
                 if (Physics.Raycast(this.transform.position, direction, out hit, fieldOfViewRadio))
@@ -90,6 +113,14 @@ public class AIController : MonoBehaviour
                     if (hit.collider.tag == "Player")
                     {
                         inSight = true;
+                        RaycastHit meleeAtackHit;
+                        if(Physics.Raycast(this.transform.position, direction, out meleeAtackHit, 2))
+                        {
+                            if(meleeAtackHit.collider.tag == "Player")
+                            {
+                                Debug.Log("ReadyToAttack");
+                            }
+                        }
                     }
                 }
             }
@@ -112,6 +143,14 @@ public class AIController : MonoBehaviour
                     if (hit.collider.tag == "Player")
                     {
                         inSight = true;
+                        RaycastHit meleeAtackHit;
+                        if (Physics.Raycast(this.transform.position, direction, out meleeAtackHit, 2))
+                        {
+                            if (meleeAtackHit.collider.tag == "Player")
+                            {
+                                Debug.Log("ReadyToAttack");
+                            }
+                        }
                     }
                 }
             }
@@ -130,6 +169,7 @@ public class AIController : MonoBehaviour
         anim = this.GetComponent<Animator>();
         enemyCollider.radius = hearingRadio;
         target = GameObject.FindGameObjectWithTag("Player");
+        roamTimer = changePathTime;
         BuildFSM();
     }
     public void FixedUpdate()
@@ -195,6 +235,7 @@ public class IdleState : FSMState
 
         if (aiController.HeardSomething())
         {
+            aiController.Rotate();
             Debug.Log("Hearing Things...");
         }
 
@@ -275,6 +316,7 @@ public class RoamState : FSMState
     public override void Behaviour(GameObject target, GameObject thisGameObject)
     {
         aiController.anim.SetBool("isRoaming", true);
+        aiController.Roam();
         timer -= Time.deltaTime;
         Debug.Log("Roaming...");
     }
@@ -321,7 +363,7 @@ public class ChaseTargetState : FSMState
 
 public class HurtState : FSMState
 {
-    float timer = 1;
+    float timer = 0.6f;
 
     public HurtState(AIController _aiController)
     {
