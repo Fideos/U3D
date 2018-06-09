@@ -54,7 +54,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunName: GatlingGun
-  damage: 1900000028000000
+  damage: 1400000023000000
   fireRate: 0.14
   bulletSpeed: 1000
   bulletsPerShot: 1

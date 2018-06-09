@@ -36,7 +36,7 @@ public class Bullet : MonoBehaviour {
             if (other.gameObject.tag == "Enemy")
             {
                 Enemy target = other.gameObject.GetComponent<Enemy>();
-                target.DealDamage(bulletDamage);
+                target.RecieveDamage(bulletDamage);
                 hit = true;
             }
         }

@@ -731,7 +731,7 @@ GameObject:
   - component: {fileID: 114481245281541868}
   - component: {fileID: 143234791724156902}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Melee Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2137,11 +2137,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5d8706f758577146843f2e290a92a6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ai: {fileID: 0}
   hp: 60
   gravity: 10
   weapon: {fileID: 0}
   rotationSpeed: 0
+  meleeDamage: 30
+  meleeAttackRate: 1
 --- !u!114 &114734789930388358
 MonoBehaviour:
   m_ObjectHideFlags: 1

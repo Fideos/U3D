@@ -8,9 +8,9 @@ public class AIController : MonoBehaviour
     [SerializeField]
     private Enemy self;
     [SerializeField]
-    public float runSpeed;
+    private float runSpeed;
     [SerializeField]
-    public float walkSpeed;
+    private float walkSpeed;
 
     public GameObject target; //El objetivo. En este caso Player.
     public Transform[] path;
@@ -31,6 +31,11 @@ public class AIController : MonoBehaviour
     private bool inSight;
     private bool inAttackRange;
     public Animator anim;
+
+    public void Attack()
+    {
+        self.Attack();
+    }
 
     public void Rotate()
     {
@@ -93,6 +98,11 @@ public class AIController : MonoBehaviour
         return hearing;
     }
 
+    public bool inRange()
+    {
+        return inAttackRange;
+    }
+
     public bool SeenTarget()
     {
         return inSight;
@@ -114,12 +124,17 @@ public class AIController : MonoBehaviour
                     {
                         inSight = true;
                         RaycastHit meleeAtackHit;
-                        if(Physics.Raycast(this.transform.position, direction, out meleeAtackHit, 2))
+                        if(Physics.Raycast(this.transform.position, direction, out meleeAtackHit, 1.5f))
                         {
                             if(meleeAtackHit.collider.tag == "Player")
                             {
-                                Debug.Log("ReadyToAttack");
+                                inAttackRange = true;
+                                Debug.Log("InRange");
                             }
+                        }
+                        else
+                        {
+                            inAttackRange = false;
                         }
                     }
                 }
@@ -133,6 +148,7 @@ public class AIController : MonoBehaviour
         {
             hearing = false;
             inSight = false;
+            inAttackRange = false;
             //target = null;
             Vector3 direction = target.transform.position - transform.position;
             if (fieldOfView / 2 >= Vector3.Angle(Vector3.forward, direction))
@@ -144,12 +160,16 @@ public class AIController : MonoBehaviour
                     {
                         inSight = true;
                         RaycastHit meleeAtackHit;
-                        if (Physics.Raycast(this.transform.position, direction, out meleeAtackHit, 2))
+                        if (Physics.Raycast(this.transform.position, direction, out meleeAtackHit, 1.5f))
                         {
                             if (meleeAtackHit.collider.tag == "Player")
                             {
                                 Debug.Log("ReadyToAttack");
                             }
+                        }
+                        else
+                        {
+                            inAttackRange = false;
                         }
                     }
                 }
@@ -195,7 +215,12 @@ public class AIController : MonoBehaviour
         ChaseTargetState chaseTarget = new ChaseTargetState(this);
         chaseTarget.AddTransition(TransitionID.LostTarget, StateID.Roaming);
         chaseTarget.AddTransition(TransitionID.StartHurt, StateID.Hurt);
+        chaseTarget.AddTransition(TransitionID.InRange, StateID.Attack);
         chaseTarget.AddTransition(TransitionID.Dying, StateID.Dead);
+
+        AttackState attack = new AttackState(this);
+        attack.AddTransition(TransitionID.OutRange, StateID.ChasingTarget);
+        attack.AddTransition(TransitionID.Dying, StateID.Dead);
 
         HurtState hurt = new HurtState(this);
         hurt.AddTransition(TransitionID.StopHurt, StateID.ChasingTarget);
@@ -208,6 +233,7 @@ public class AIController : MonoBehaviour
         fsm.AddState(roam);
         fsm.AddState(idle);
         fsm.AddState(chaseTarget);
+        fsm.AddState(attack);
         fsm.AddState(hurt);
         fsm.AddState(dead);
     }
@@ -339,6 +365,11 @@ public class ChaseTargetState : FSMState
             Debug.Log("?");
         }
 
+        if (aiController.inRange())
+        {
+            thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.InRange);
+        }
+
         if (aiController.isHit())
         {
             aiController.anim.SetBool("isRunning", false);
@@ -359,6 +390,42 @@ public class ChaseTargetState : FSMState
         aiController.ChaseTarget();
         Debug.Log("Chasing...");
     }
+}
+
+public class AttackState : FSMState
+{
+
+    public AttackState(AIController _aiController)
+    {
+        aiController = _aiController;
+        myID = StateID.Attack;
+    }
+
+    public override void Reason(GameObject target, GameObject thisGameObject)
+    {
+        if (!aiController.inRange())
+        {
+            aiController.anim.SetBool("inRange", false);
+            thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.OutRange);
+            Debug.Log("OutRange");
+        }
+
+        if (aiController.GetStatus() <= 0)
+        {
+            aiController.anim.SetBool("inRange", false);
+            thisGameObject.GetComponent<AIController>().SetTransition(TransitionID.Dying);
+        }
+
+    }
+
+    public override void Behaviour(GameObject target, GameObject thisGameObject)
+    {
+        aiController.anim.SetBool("inRange", true);
+        aiController.Attack();
+        aiController.Rotate();
+        Debug.Log("Attacking...");
+    }
+
 }
 
 public class HurtState : FSMState

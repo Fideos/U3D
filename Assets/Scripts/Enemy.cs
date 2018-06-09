@@ -6,8 +6,6 @@ public class Enemy : MonoBehaviour {
 
 
     [SerializeField]
-    private AIController ai;
-    [SerializeField]
     private float hp;
     [SerializeField]
     private float gravity;
@@ -15,11 +13,30 @@ public class Enemy : MonoBehaviour {
     private Gun weapon;
     [SerializeField]
     private float rotationSpeed;
+    [SerializeField]
+    private float meleeDamage;
+    [SerializeField]
+    private float meleeAttackRate;
 
     private float hpUpdate;
     private CharacterController controller;
 
     private Vector3 vectorDir;
+
+    private MyGameManager currentGameManager;
+
+    private float timer;
+
+    public void Attack()
+    {
+        if (timer <= 0)
+        {
+            Debug.Log("Enemy attacked you!");
+            currentGameManager.RecieveDamage(meleeDamage);
+            timer = meleeAttackRate;
+        }
+        timer -= Time.deltaTime;
+    }
 
     public void Rotate(Transform target)
     {
@@ -74,7 +91,7 @@ public class Enemy : MonoBehaviour {
         Destroy(this.gameObject.GetComponent<CharacterController>());
     }
 
-    public void DealDamage(float damage)
+    public void RecieveDamage(float damage)
     {
         hp = hp - damage;
     }
@@ -83,6 +100,7 @@ public class Enemy : MonoBehaviour {
     {
         hpUpdate = hp;
         controller = this.gameObject.GetComponent<CharacterController>();
+        currentGameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<MyGameManager>();
     }
 
 }

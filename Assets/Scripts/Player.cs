@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
-
     [SerializeField]
     private float speed;
     [SerializeField]
@@ -29,12 +28,27 @@ public class Player : MonoBehaviour {
     private float inputZ;
     [SerializeField]
     private float inputY;
-    [SerializeField]
-    //private float rotation;
+
+
+    /* Game Manager y UI */
+
+    private bool isDead;
+
+    public bool IsDead()
+    {
+        return isDead;
+    }
+
+    public void Die()
+    {
+        isDead = true;
+    }
+
+    /* */
 
     public bool GetMovement()
     {
-        if(controller.velocity != new Vector3 (0,0,0))
+        if (controller.velocity != new Vector3(0, 0, 0))
         {
             return true;
         }
@@ -70,24 +84,6 @@ public class Player : MonoBehaviour {
         {
             Jump(ref y);
         }
-
-        /* Arreglar con mouse.
-        if (Input.GetKey(KeyCode.Q))
-        {
-            rotation = -1;
-        }
-        else
-        {
-            if (Input.GetKey(KeyCode.E))
-            {
-                rotation = 1;
-            }
-            else
-            {
-                rotation = 0;
-            }
-        }
-        */
     }
 
     private void Movement()
@@ -105,6 +101,7 @@ public class Player : MonoBehaviour {
 
     void Awake()
     {
+        isDead = false;
         controller = GetComponent<CharacterController>();
         if (!controller)
         {
@@ -114,8 +111,10 @@ public class Player : MonoBehaviour {
 
     void Update ()
     {
-        GetInput(ref inputX, ref inputY, ref inputZ);
-        Movement();
-        //Rotate(rotation);
+        if (!isDead)
+        {
+            GetInput(ref inputX, ref inputY, ref inputZ);
+            Movement();
+        }
     }
 }

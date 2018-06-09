@@ -30,7 +30,13 @@ public class GunController : MonoBehaviour {
     [SerializeField]
     private float volHighRange;
     
-    
+    /*UI*/
+
+    public float GetBulletsLeft()
+    {
+        return bulletsLeft;
+    }
+
     /*ANIMATOR*/
 
     public bool GetReloading()

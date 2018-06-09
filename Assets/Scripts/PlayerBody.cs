@@ -32,7 +32,10 @@ public class PlayerBody : MonoBehaviour {
     }
 
     void Update () {
+        if(!playerRef.IsDead())
+        {
+            GetSight();
+        }
         AnimUpdate();
-        GetSight();
     }
 }
