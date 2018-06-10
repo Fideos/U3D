@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour {
+public class EnemyBullet : MonoBehaviour {
 
 
-
-    [SerializeField]
-    private bool destroyOnCollision;
     [SerializeField]
     private int bulletDamage;
+    [SerializeField]
+    private MyGameManager currentGameManager;
 
     private bool hit;
 
@@ -33,25 +32,17 @@ public class Bullet : MonoBehaviour {
     {
         if (!hit) // Reformular mas tarde
         {
-            if (other.gameObject.tag == "Enemy")
+            if (other.gameObject.tag == "Player")
             {
-                Enemy target = other.gameObject.GetComponent<Enemy>();
-                target.RecieveDamage(bulletDamage);
+                currentGameManager.RecieveDamage(bulletDamage);
                 hit = true;
             }
-            else
-            {
-                if(other.gameObject.tag == "EnemyShooter")
-                {
-                    ShooterEnemy target = other.gameObject.GetComponent<ShooterEnemy>();
-                    target.RecieveDamage(bulletDamage);
-                    hit = true;
-                }
-            }
         }
-        if (destroyOnCollision)
-        {
-            DestroyBullet();
-        }
+        DestroyBullet();
+    }
+
+    private void Awake()
+    {
+        currentGameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<MyGameManager>();
     }
 }

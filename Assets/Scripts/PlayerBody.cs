@@ -22,6 +22,7 @@ public class PlayerBody : MonoBehaviour {
 
     private void AnimUpdate()
     {
+        anim.SetBool("isDead", playerRef.IsDead());
         anim.SetBool("isRunning", playerRef.GetMovement());
         anim.SetBool("isReloading", gunRef.GetReloading());
     }

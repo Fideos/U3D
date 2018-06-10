@@ -14,13 +14,13 @@ public class PoolManager : MonoBehaviour
     [SerializeField]
     ObjectPool[] poolManager;
 
-    public void ShootBullet(string name, Vector3 target, float speed, int damage)
+    public void ShootBullet(string name, Vector3 target, float speed, int damage, bool isEnemy)
     {
         for (int i = 0; i < poolManager.Length; i++)
         {
             if (poolManager[i].name == name)
             {
-                poolManager[i].ShootBullet(target, speed, damage);
+                poolManager[i].ShootBullet(target, speed, damage, isEnemy);
             }
         }
     }

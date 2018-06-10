@@ -70,7 +70,7 @@ public class GunController : MonoBehaviour {
         this.gameObject.transform.LookAt(aim);
         this.transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y + bulletAngle, 0);
         //Debug.Log(aim);
-        PoolManager.Instance().ShootBullet("Bullets", this.gameObject.transform.forward, currentWeapon.bulletSpeed, bulletDamage);
+        PoolManager.Instance().ShootBullet("Bullets", this.gameObject.transform.forward, currentWeapon.bulletSpeed, bulletDamage, false);
     }
 
     private void FireBullet()

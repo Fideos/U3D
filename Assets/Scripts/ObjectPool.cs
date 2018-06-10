@@ -16,13 +16,22 @@ public class ObjectPool
     [SerializeField]
     GameObject[] pool;
 
-    public void ShootBullet(Vector3 target, float speed, int damage)
+    public void ShootBullet(Vector3 target, float speed, int damage, bool enemy)
     {
         Rigidbody rb;
-        Bullet b;
         rb = pool[lastSpawned].GetComponent<Rigidbody>();
-        b = pool[lastSpawned].GetComponent<Bullet>();
-        b.SetBulletDamage(damage);
+        if (enemy)
+        {
+            EnemyBullet b;
+            b = pool[lastSpawned].GetComponent<EnemyBullet>();
+            b.SetBulletDamage(damage);
+        }
+        else
+        {
+            Bullet b;
+            b = pool[lastSpawned].GetComponent<Bullet>();
+            b.SetBulletDamage(damage);
+        }
         rb.AddForce(target * speed);
     }
 

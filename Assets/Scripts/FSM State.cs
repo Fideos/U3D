@@ -15,6 +15,8 @@ public enum TransitionID
     Healed,
     InRange,
     OutRange,
+    Unloaded,
+    Loaded,
 }
 
 public enum StateID
@@ -26,11 +28,13 @@ public enum StateID
     Hurt,
     Dead,
     Attack,
+    Reload,
 }
 
 public abstract class FSMState
 {
     protected AIController aiController;
+    protected AIShooter aiShooter;
     protected Dictionary<TransitionID, StateID> stateDictionary = new Dictionary<TransitionID, StateID>();
     protected StateID myID;
     public StateID getID

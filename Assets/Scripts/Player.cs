@@ -14,8 +14,6 @@ public class Player : MonoBehaviour {
     public float gravity;
     [SerializeField]
     public float jumpsCap;
-    
-    public GunController handReference;
 
     private float jumpCount = 0;
 
@@ -29,6 +27,7 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private float inputY;
 
+    public GunController handReference;
 
     /* Game Manager y UI */
 
