@@ -32,6 +32,16 @@ public class GunController : MonoBehaviour {
     
     /*UI*/
 
+    public int GetCurrentWeaponID()
+    {
+        return currentWeapon.gunID;
+    }
+
+    public float GetCurrentWeaponMagSize()
+    {
+        return currentWeapon.magSize;
+    }
+
     public float GetBulletsLeft()
     {
         return bulletsLeft;

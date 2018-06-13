@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyGunController : MonoBehaviour {
 
     [SerializeField]
-    private Gun currentWeapon;
+    public Gun currentWeapon;
 
     private float lastShot = 0.0f;
     private bool ready;

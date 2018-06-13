@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-
+    public int gunID;
     public string gunName;
     public int[] damage;
     public float fireRate;
@@ -21,12 +21,17 @@ public class Gun : MonoBehaviour
     public AudioClip midReloadingSound;
     public AudioClip finishReloadingSound;
 
+    private bool playerInTrigger;
+
+    private Player player;
+    
     [SerializeField]
     private bool destroyOnPickup;
 
+    /*
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.CompareTag("Player"))
         {
             Debug.Log("Ready to pick");
             if (Input.GetKeyDown(KeyCode.E))
@@ -37,6 +42,26 @@ public class Gun : MonoBehaviour
                     Destroy(this.gameObject);
                 }
             }
+        }
+    }
+    */
+
+    private void OnTriggerEnter(Collider other) //Lo cambié por que provocaba un drop de frames.
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Ready to pick");
+            player = other.GetComponent<Player>();
+            playerInTrigger = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Not ready to pick");
+            playerInTrigger = false;
         }
     }
 
@@ -52,6 +77,8 @@ public class Gun : MonoBehaviour
         */
         //Debug.Log(damage[0] + ", " + damage[1]);
 
+        playerInTrigger = false;
+
         if(bulletsPerShot <= 0)
         {
             bulletsPerShot = 1;
@@ -61,6 +88,21 @@ public class Gun : MonoBehaviour
             name = "Default";
         }
         this.transform.rotation = Quaternion.Euler(90, 0, 0);
+    }
+
+    private void Update()
+    {
+        if (playerInTrigger)
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                player.handReference.WeaponPickup(this);
+                if (destroyOnPickup)
+                {
+                    Destroy(this.gameObject);
+                }
+            }
+        }
     }
 
 }

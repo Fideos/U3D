@@ -17,8 +17,18 @@ public class ShooterEnemy : MonoBehaviour {
 
     private Vector3 vectorDir;
 
+    private MyGameManager currentGameManager;
+
     [SerializeField]
     private EnemyGunController handRef;
+
+    [SerializeField]
+    private AIShooter myAI;
+
+    private void DropWeapon()
+    {
+        Instantiate(currentGameManager.GetWeaponDrops(handRef.currentWeapon.gunID), transform.position, Quaternion.identity);
+    }
 
     public bool GunLoaded()
     {
@@ -58,6 +68,8 @@ public class ShooterEnemy : MonoBehaviour {
     public void Die()
     {
         Destroy(this.gameObject.GetComponent<CharacterController>());
+        Destroy(myAI);
+        DropWeapon();
     }
 
     public void RecieveDamage(float damage)
@@ -93,6 +105,7 @@ public class ShooterEnemy : MonoBehaviour {
 
         hpUpdate = hp;
         controller = this.gameObject.GetComponent<CharacterController>();
+        currentGameManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<MyGameManager>();
     }
 
 }

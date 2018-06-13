@@ -110,7 +110,7 @@ public class Player : MonoBehaviour {
 
     void Update ()
     {
-        if (!isDead)
+        if (!isDead && !handReference.GetReloading())
         {
             GetInput(ref inputX, ref inputY, ref inputZ);
             Movement();

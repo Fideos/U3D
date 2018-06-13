@@ -53,6 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3322e2af9fd4d5446abbb9f0f0cc9719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gunID: 1
   gunName: GatlingGun
   damage: 1400000023000000
   fireRate: 0.14
