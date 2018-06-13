@@ -29,7 +29,7 @@ public class GunController : MonoBehaviour {
     private float volLowRange;
     [SerializeField]
     private float volHighRange;
-    
+
     /*UI*/
 
     public int GetCurrentWeaponID()

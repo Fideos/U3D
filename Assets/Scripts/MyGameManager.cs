@@ -41,6 +41,63 @@ public class MyGameManager : MonoBehaviour {
     public CursorMode cursorMode = CursorMode.Auto;
     public Vector2 hotSpot = Vector2.zero;
 
+    /* Text Popups */
+    [SerializeField]
+    private Text pickupPop;
+    [SerializeField]
+    private Text reloadPop;
+    [SerializeField]
+    private Text losePop;
+    [SerializeField]
+    private Text winPop;
+
+    public void PickupPop(bool isPicking)
+    {
+        if (isPicking)
+        {
+            pickupPop.gameObject.SetActive(true);
+        }
+        else
+        {
+            pickupPop.gameObject.SetActive(false);
+        }
+    }
+
+    private void ReloadPop()
+    {
+        if(bulletsLeft <= 0)
+        {
+            reloadPop.gameObject.SetActive(true);
+        }
+        else
+        {
+            reloadPop.gameObject.SetActive(false);
+        }
+    }
+
+    private void LostPop()
+    {
+        if (myPlayer.IsDead())
+        {
+            losePop.gameObject.SetActive(true);
+        }
+        else
+        {
+            losePop.gameObject.SetActive(false);
+        }
+    }
+
+    private void WonPop()
+    {
+        if(enemiesInScene <= 0)
+        {
+            winPop.gameObject.SetActive(true);
+        }
+        else
+        {
+            winPop.gameObject.SetActive(false);
+        }
+    }
 
     private void AddEnemies()
     {
@@ -111,6 +168,9 @@ public class MyGameManager : MonoBehaviour {
         string markerInfo = bulletsLeft + "|" + playerHand.GetCurrentWeaponMagSize();
         //Debug.Log(markerInfo);
         bulletsMarker.text = markerInfo;
+        ReloadPop();
+        LostPop();
+        WonPop();
     }
 
     private void Awake()

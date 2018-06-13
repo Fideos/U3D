@@ -28,6 +28,8 @@ public class Gun : MonoBehaviour
     [SerializeField]
     private bool destroyOnPickup;
 
+    private MyGameManager currentManager;
+
     /*
     private void OnTriggerStay(Collider other)
     {
@@ -88,20 +90,27 @@ public class Gun : MonoBehaviour
             name = "Default";
         }
         this.transform.rotation = Quaternion.Euler(90, 0, 0);
+        currentManager = GameObject.FindGameObjectWithTag("Manager").GetComponent<MyGameManager>();
     }
 
     private void Update()
     {
         if (playerInTrigger)
         {
+            currentManager.PickupPop(true);
             if (Input.GetKeyDown(KeyCode.E))
             {
                 player.handReference.WeaponPickup(this);
                 if (destroyOnPickup)
                 {
+                    currentManager.PickupPop(false);
                     Destroy(this.gameObject);
                 }
             }
+        }
+        else
+        {
+            currentManager.PickupPop(false);
         }
     }
 

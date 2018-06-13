@@ -74,7 +74,7 @@ public class Enemy : MonoBehaviour {
 
     public void Movement(Transform target, float speed)
     {
-        vectorDir = target.position - transform.position;
+        vectorDir = target.position - this.transform.position;
         vectorDir *= speed;
         if (!controller.isGrounded)
         {
